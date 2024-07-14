@@ -40,6 +40,19 @@ app.MapGet("/demo", () => {
     return "Hello World!";
 }).WithName("Demo").WithOpenApi();
 
+List<TodoItem> todos = new List<TodoItem>();
+
+app.MapPost("/todos", (TodoItemPOC todo) => {
+    TodoItem newTodo = new TodoItem
+    {
+        Id = todos.Count + 1,
+        Name = todo.Name,
+        IsComplete = todo.IsComplete
+    };
+    todos.Add(newTodo);
+    return Results.Created($"/todos/{newTodo.Id}", newTodo);
+});
+
 app.Run();
 
 record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
